@@ -1,0 +1,143 @@
+
+cont = 0;
+header = Map();
+header.put("Accept","application/vnd.api+json");
+response = invokeurl
+[
+	url :"https://www.zohoapis.com/workdrive/api/v1/files/cc3cleafd799f2ac1427085110951a8bc6cb9/files?page%5Blimit%5D=50&page%5Boffset%5D=0"
+	type :GET
+	headers:header
+	connection:"cnx_workdrive"
+];
+data_response = response.get("data");
+lista_imagenes = List();
+for each  dato in data_response
+{
+	id_data = dato.get("id");
+	header = Map();
+	header.put("Accept","application/vnd.api+json");
+	data = Map();
+	data_param1 = Map();
+	att_param1 = Map();
+	att_param1.put("resource_id",id_data);
+	att_param1.put("link_name","imagenes");
+	att_param1.put("link_type","download");
+	att_param1.put("request_user_data","false");
+	att_param1.put("allow_download","true");
+	data_param1.put("attributes",att_param1);
+	data_param1.put("type","links");
+	data.put("data",data_param1);
+	response_url = invokeurl
+	[
+		url :"https://www.zohoapis.com/workdrive/api/v1/links"
+		type :POST
+		parameters:data.toString()
+		headers:header
+		connection:"cnx_workdrive"
+	];
+	data_atributes = response_url.get("data").get("attributes").get("link");
+	lista_imagenes.add(data_atributes + "?directDownload=true");
+	cont = cont + 1;
+	if(cont > 5)
+	{
+		break;
+	}
+}
+info lista_imagenes;
+data = Map();
+id_vistas = "hv4ms8c9b3f067ed74d83b8122100230741a2";
+respuesta = zoho.writer.getMergeFields(id_vistas,"con_templates");
+info respuesta;
+registro = zoho.crm.getRecordById("Visitas_en_Terreno",id_visita);
+info registro;
+numero_ot = registro.get("No_OT");
+fecha = registro.get("Fecha");
+contacto = IF(registro.get("Contacto") != null,registro.get("Contacto").get("name"),"");
+nombre_cuenta = IF(registro.get("Cuenta") != null,registro.get("Cuenta").get("name"),"");
+tipo_sistema = registro.get("Tipo_de_sistema");
+responsable = registro.get("Responsable");
+validacion = registro.get("Validaci_n");
+validacion_2 = registro.get("Validaci_n_2");
+validacion_3 = registro.get("Validaci_n_3");
+sistema_funciona = registro.get("El_sistema_de_cloraci_n_est_funcionando_correcta");
+niveles_cloro = registro.get("Los_niveles_de_cloro_en_el_agua_son_los_adecuados");
+lectura_sensores = registro.get("La_lectura_de_los_sensores_es_precisa");
+senal_salida = registro.get("La_se_al_de_salida_del_sistema_se_est_enviando_c");
+salida = registro.get("La_se_al_de_salida_del_sistema_se_est_enviando_c");
+seguridad = registro.get("Los_sistemas_de_seguridad_del_sistema_est_n_funci");
+mediciones = registro.get("Los_registros_y_las_mediciones_se_est_n_tomando_y");
+validaciones = registro.get("Se_han_realizado_pruebas_y_validaciones_para_veri");
+capacitacion = registro.get("Se_ha_realizado_una_capacitaci_n_adecuada_al_pers");
+manual = registro.get("El_manual_del_usuario_y_el_manual_de_mantenimient");
+problemas = registro.get("Los_problemas_identificados_durante_la");
+planes = registro.get("Se_han_hecho_planes_para_futuras_actualizaciones");
+calibracion = registro.get("Valor_Calibraci_n_pH");
+estado_cali = registro.get("Estado_Calibraci_n_pH");
+valor = registro.get("Valor_Calibraci_n_Cloro");
+estado_ph = registro.get("Estado_Calibraci_n_Cloro");
+otra_variable = registro.get("Valor_Calibraci_n_Otra_Variable");
+estado_calibracion = registro.get("Estado_de_Calibraci_n");
+Recomendaci_n_1 = registro.get("Recomendaci_n_1");
+Recomendaci_n_2 = registro.get("Recomendaci_n_2");
+Recomendaci_n_3 = registro.get("Recomendaci_n_3");
+re_co = registro.get("Reemplazar_los_componentes_seg_n_sea_necesario");
+regi_datos = registro.get("Mantener_un_registro_de_los_datos");
+personal = registro.get("Capacite_al_personal");
+mto_preventivo = registro.get("Establezca_un_plan_de_mantenimiento_preventivo");
+img = registro.get("Carga_de_Imagenes");
+conclusion = registro.get("Conclusi_n");
+// nuevas
+serial = registro.get("Seriales_de_Controlador_y_Sonda");
+marca = registro.get("Marca_Fabricante");
+observaciones = registro.get("Observaciones_Estado_inicial");
+comentarios = registro.get("Comentarios_Adicionales");
+nombre_otra_variable = registro.get("Nombre_de_Otra_Variable");
+otras_recomendaciones = registro.get("Otras_recomendaciones");
+imagenes = registro.get("Im_genes");
+data.put("No_OT",numero_ot);
+data.put("Fecha",fecha);
+data.put("Contacto",contacto);
+data.put("Cuenta.Account_Name",nombre_cuenta);
+data.put("Tipo_de_sistema",tipo_sistema);
+data.put("Responsable",responsable);
+data.put("Validaci_n",validacion);
+data.put("Validaci_n_2",validacion_2);
+data.put("Validaci_n_3",validacion_3);
+data.put("El_sistema_de_cloraci_n_est_funcionando_correcta",sistema_funciona);
+data.put("Los_niveles_de_cloro_en_el_agua_son_los_adecuados",niveles_cloro);
+data.put("La_lectura_de_los_sensores_es_precisa",lectura_sensores);
+data.put("La_se_al_de_salida_del_sistema_se_est_enviando_c",senal_salida);
+data.put("La_se_al_de_salida_del_sistema_se_est_enviando_c",salida);
+data.put("Los_sistemas_de_seguridad_del_sistema_est_n_funci",seguridad);
+data.put("Los_registros_y_las_mediciones_se_est_n_tomando_y",mediciones);
+data.put("Se_han_realizado_pruebas_y_validaciones_para_veri",validaciones);
+data.put("Se_ha_realizado_una_capacitaci_n_adecuada_al_pers",capacitacion);
+data.put("El_manual_del_usuario_y_el_manual_de_mantenimient",manual);
+data.put("Los_problemas_identificados_durante_la",problemas);
+data.put("Se_han_hecho_planes_para_futuras_actualizaciones",planes);
+data.put("Valor_Calibraci_n_pH",calibracion);
+data.put("Estado_Calibraci_n_pH",estado_cali);
+data.put("Valor_Calibraci_n_Cloro",valor);
+data.put("Estado_Calibraci_n_Cloro",estado_ph);
+data.put("Valor_Calibraci_n_Otra_Variable",otra_variable);
+data.put("Estado_de_Calibraci_n",estado_calibracion);
+data.put("Recomendaci_n_1",Recomendaci_n_1);
+data.put("Recomendaci_n_2",Recomendaci_n_2);
+data.put("Recomendaci_n_3",Recomendaci_n_3);
+data.put("Reemplazar_los_componentes_seg_n_sea_necesario",re_co);
+data.put("Mantener_un_registro_de_los_datos",regi_datos);
+data.put("Capacite_al_personal",personal);
+data.put("Establezca_un_plan_de_mantenimiento_preventivo",mto_preventivo);
+data.put("serial",serial);
+data.put("Marca_Fabricante",marca);
+data.put("Observaciones_Estado_inicial",observaciones);
+data.put("Comentarios_Adicionales",comentarios);
+data.put("Nombre_de_Otra_Variable",nombre_otra_variable);
+data.put("imgs",lista_imagenes);
+data.put("Otras_recomendaciones",otras_recomendaciones);
+data.put("Im_genes",imagenes);
+data.put("Conclusi_n",conclusion);
+map_json = Map();
+map_json.put("merge_data",{"data":data});
+pdf = zoho.writer.mergeAndDownload(id_vistas,"pdf",map_json,"con_templates");
+attach = zoho.crm.attachFile("Visitas_en_Terreno",id_visita,pdf);
